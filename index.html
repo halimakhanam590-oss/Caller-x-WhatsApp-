@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Caller X</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #0b141a; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .chat-bg { background-color: #0b141a; background-image: radial-gradient(#1f2c34 1px, transparent 1px); background-size: 20px 20px; }
+    .msg-out { background-color: #005c4b; }
+    .msg-in { background-color: #202c33; }
+  </style>
+</head>
+<body class="h-screen flex flex-col justify-between text-gray-100 select-none">
+
+  <!-- Header -->
+  <header class="bg-[#202c33] px-4 py-3 flex items-center justify-between shadow-md z-10">
+    <div class="flex items-center space-x-3">
+      <div class="relative">
+        <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-lg text-white">
+          <i class="fa-solid fa-user-secret"></i>
+        </div>
+        <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-[#202c33] rounded-full"></span>
+      </div>
+      <div>
+        <h1 class="text-base font-semibold leading-tight flex items-center gap-2">
+          Caller X <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded">PRO</span>
+        </h1>
+        <p class="text-xs text-emerald-400">Online</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center space-x-5 text-gray-300">
+      <button onclick="triggerCall('Audio')" class="hover:text-emerald-400 transition"><i class="fa-solid fa-phone"></i></button>
+      <button onclick="triggerCall('Video')" class="hover:text-emerald-400 transition"><i class="fa-solid fa-video"></i></button>
+      <button class="hover:text-emerald-400 transition"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+    </div>
+  </header>
+
+  <!-- Chat Area -->
+  <main id="chatBox" class="flex-1 overflow-y-auto p-4 space-y-3 chat-bg flex flex-col">
+    <!-- Default Security Notice -->
+    <div class="self-center bg-[#182229] text-[#ffd279] text-xs px-3 py-1.5 rounded-lg max-w-[85%] text-center shadow">
+      🔒 Messages and calls are end-to-end encrypted in Caller X.
+    </div>
+
+    <!-- Default Message -->
+    <div class="self-start msg-in text-white text-sm px-3.5 py-2 rounded-2xl rounded-tl-none max-w-[75%] shadow">
+      Hey! Welcome to Caller X. Ready to connect?
+      <span class="block text-[10px] text-gray-400 text-right mt-1">12:00 PM</span>
+    </div>
+  </main>
+
+  <!-- Input Field -->
+  <footer class="bg-[#202c33] p-2 flex items-center space-x-2">
+    <div class="flex-1 flex items-center bg-[#2a3942] rounded-full px-3 py-1.5">
+      <button class="text-gray-400 hover:text-gray-200 mr-2"><i class="fa-regular fa-face-smile"></i></button>
+      <input id="msgInput" type="text" placeholder="Message" class="bg-transparent text-sm w-full outline-none text-white placeholder-gray-400" onkeypress="handleKeyPress(event)">
+      <button class="text-gray-400 hover:text-gray-200 ml-2"><i class="fa-solid fa-paperclip"></i></button>
+    </div>
+    <button onclick="sendMessage()" class="w-11 h-11 bg-[#00a884] rounded-full flex items-center justify-center text-white shadow-md active:scale-95 transition">
+      <i class="fa-solid fa-paper-plane text-sm"></i>
+    </button>
+  </footer>
+
+  <!-- Simple Logic Script -->
+  <script>
+    const chatBox = document.getElementById('chatBox');
+    const msgInput = document.getElementById('msgInput');
+
+    function getCurrentTime() {
+      const now = new Date();
+      return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function sendMessage() {
+      const text = msgInput.value.trim();
+      if (!text) return;
+
+      // Add user bubble
+      const outBubble = document.createElement('div');
+      outBubble.className = "self-end msg-out text-white text-sm px-3.5 py-2 rounded-2xl rounded-tr-none max-w-[75%] shadow";
+      outBubble.innerHTML = `${text}<span class="block text-[10px] text-emerald-200 text-right mt-1">${getCurrentTime()} <i class="fa-solid fa-check-double text-[9px]"></i></span>`;
+      chatBox.appendChild(outBubble);
+
+      msgInput.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Automated reply simulation
+      setTimeout(() => {
+        const inBubble = document.createElement('div');
+        inBubble.className = "self-start msg-in text-white text-sm px-3.5 py-2 rounded-2xl rounded-tl-none max-w-[75%] shadow";
+        inBubble.innerHTML = `Received: "${text}". Caller X connected.<span class="block text-[10px] text-gray-400 text-right mt-1">${getCurrentTime()}</span>`;
+        chatBox.appendChild(inBubble);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 1000);
+    }
+
+    function handleKeyPress(e) {
+      if (e.key === 'Enter') sendMessage();
+    }
+
+    function triggerCall(type) {
+      alert(`${type} Call functionality connecting via Caller X server...`);
+    }
+  </script>
+</body>
+</html>
